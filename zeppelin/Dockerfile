@@ -2,7 +2,9 @@ FROM bde2020/hadoop-base:2.0.0-hadoop3.2.1-java8
 
 # Fix broken Debian Stretch repositories
 RUN sed -i 's|http://deb.debian.org|http://archive.debian.org|g' /etc/apt/sources.list && \
-    sed -i '/security.debian.org/d' /etc/apt/sources.list
+    sed -i 's|http://security.debian.org|http://archive.debian.org/debian-security|g' /etc/apt/sources.list && \
+    sed -i '/stretch-updates/d' /etc/apt/sources.list && \
+    echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until
 
 # Install required packages
 RUN apt-get update && \
