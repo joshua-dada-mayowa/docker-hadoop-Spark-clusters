@@ -87,8 +87,6 @@ services:
     build: ./zeppelin
     container_name: zeppelin
     hostname: zeppelin
-    networks:
-      - docker-hadoop-master_default
     ports:
       - "8890:8080"
     volumes:
