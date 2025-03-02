@@ -1,0 +1,6 @@
+<configuration>
+    <property>
+        <name>zeppelin.spark.home</name>
+        <value>/opt/spark</value>
+    </property>
+</configuration>
