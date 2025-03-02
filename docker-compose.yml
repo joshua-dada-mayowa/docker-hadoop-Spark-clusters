@@ -83,22 +83,6 @@ services:
       - hadoop_datanode3:/hadoop/dfs/data
     env_file:
       - ./hadoop.env
-  zeppelin:
-    build: ./zeppelin
-    container_name: zeppelin
-    hostname: zeppelin
-    ports:
-      - "8890:8080"
-    volumes:
-      - zeppelin_notebook:/notebook
-      - zeppelin_logs:/opt/zeppelin/logs
-    environment:
-      - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
-    depends_on:
-      - namenode
-      - resourcemanager
-      - spark-master
-    restart: unless-stopped
 
 volumes:
   hadoop_namenode:
@@ -106,5 +90,3 @@ volumes:
   hadoop_datanode2:
   hadoop_datanode3:
   hadoop_historyserver:
-  zeppelin_notebook:
-  zeppelin_logs:
