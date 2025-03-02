@@ -1,7 +1,12 @@
 FROM bde2020/hadoop-base:2.0.0-hadoop3.2.1-java8
 
+# Fix broken Debian Stretch repositories
+RUN sed -i 's|http://deb.debian.org|http://archive.debian.org|g' /etc/apt/sources.list && \
+    sed -i '/security.debian.org/d' /etc/apt/sources.list
+
 # Install required packages
-RUN apt-get update && apt-get install -y wget procps python3 python3-pip
+RUN apt-get update && \
+    apt-get install -y wget procps python3 python3-pip
 
 # Set Zeppelin version
 ENV ZEPPELIN_VERSION=0.10.1
