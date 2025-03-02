@@ -12,7 +12,9 @@ services:
       - ./hadoop.env
     ports:
       - "9870:9870"
-  
+    networks:
+      - hadoop-net
+
   resourcemanager:
     build: ./resourcemanager
     container_name: resourcemanager
@@ -26,7 +28,9 @@ services:
       - ./hadoop.env
     ports:
       - "8089:8088"
-  
+    networks:
+      - hadoop-net
+
   historyserver:
     build: ./historyserver
     container_name: historyserver
@@ -40,7 +44,9 @@ services:
       - ./hadoop.env
     ports:
       - "8188:8188"
-  
+    networks:
+      - hadoop-net
+
   nodemanager1:
     build: ./nodemanager
     container_name: nodemanager1
@@ -53,7 +59,9 @@ services:
       - ./hadoop.env
     ports:
       - "8042:8042"
-  
+    networks:
+      - hadoop-net
+
   datanode1:
     build: ./datanode
     container_name: datanode1
@@ -63,7 +71,9 @@ services:
       - hadoop_datanode1:/hadoop/dfs/data
     env_file:
       - ./hadoop.env
-  
+    networks:
+      - hadoop-net
+
   datanode2:
     build: ./datanode
     container_name: datanode2
@@ -73,7 +83,9 @@ services:
       - hadoop_datanode2:/hadoop/dfs/data
     env_file:
       - ./hadoop.env
-  
+    networks:
+      - hadoop-net
+
   datanode3:
     build: ./datanode
     container_name: datanode3
@@ -83,29 +95,16 @@ services:
       - hadoop_datanode3:/hadoop/dfs/data
     env_file:
       - ./hadoop.env
-  zeppelin:
-      build: ./zeppelin
-      container_name: zeppelin
-      hostname: zeppelin
-      networks:
-        - docker-hadoop-master_default
-      ports:
-        - "8890:8080"
-      volumes:
-        - zeppelin_notebook:/notebook
-        - zeppelin_logs:/opt/zeppelin/logs
-      environment:
-        - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
-      depends_on:
-        - namenode
-        - resourcemanager
-        - spark-master
-      restart: unless-stopped
+    networks:
+      - hadoop-net
+
 volumes:
   hadoop_namenode:
   hadoop_datanode1:
   hadoop_datanode2:
   hadoop_datanode3:
   hadoop_historyserver:
-  zeppelin_notebook:
-  zeppelin_logs:
+
+networks:
+  hadoop-net:
+    name: docker-hadoop-master_default
