@@ -1,14 +1,15 @@
-FROM bde2020/hadoop-base:2.0.0-hadoop3.2.1-java8
+FROM bde2020/hadoop-base:latest
 
-# Fix broken Debian Stretch repositories
-RUN sed -i 's|http://deb.debian.org|http://archive.debian.org|g' /etc/apt/sources.list && \
-    sed -i 's|http://security.debian.org|http://archive.debian.org/debian-security|g' /etc/apt/sources.list && \
-    sed -i '/stretch-updates/d' /etc/apt/sources.list && \
-    echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until
+
+# Update apt-key handling and repositories
+RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /etc/apt/sources.list && \
+    sed -i 's|http://security.debian.org/debian-security|http://archive.debian.org/debian-security|g' /etc/apt/sources.list && \
+    apt-get update || true
+
 
 # Install required packages
-RUN apt-get update && \
-    apt-get install -y wget procps python3 python3-pip
+RUN apt-get install -y --no-install-recommends wget procps python3 python3-pip && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set Zeppelin version
 ENV ZEPPELIN_VERSION=0.10.1
